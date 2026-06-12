@@ -31,6 +31,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
+        <!-- 示例能力目录 API -->
+        <dependency>
+            <groupId>cn.javastack</groupId>
+            <artifactId>spring-boot-sample-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 

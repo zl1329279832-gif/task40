@@ -25,6 +25,7 @@
         <module>spring-boot-webflux</module>
         <module>spring-boot-logging</module>
         <module>spring-boot-test</module>
+        <module>spring-boot-sample-api</module>
         <module>javastack-spring-boot-starter</module>
         <module>javastack-spring-boot-starter-sample</module>
         <module>spring-boot-properties</module>

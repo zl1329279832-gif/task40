@@ -17,6 +17,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         return http.authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers("/test/**").hasRole("TEST")
+                            .requestMatchers("/api/samples/**").permitAll()
                             .requestMatchers("/**").permitAll();
                 })
                 .logout((logout) -> logout.logoutSuccessUrl("/"))
