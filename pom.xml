@@ -57,6 +57,7 @@
         <module>spring-boot-war</module>
 		<module>spring-boot-actuator</module>
         <module>spring-boot-aop</module>
+        <module>spring-boot-sample-api</module>
     </modules>
 
     <packaging>pom</packaging>
