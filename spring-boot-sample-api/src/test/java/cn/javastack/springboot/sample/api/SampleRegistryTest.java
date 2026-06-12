@@ -116,6 +116,25 @@ class SampleRegistryTest {
         assertTrue(result.isSuccess());
     }
 
+    /**
+     * 回归测试：验证在子类（模拟 CGLIB 代理）实例上执行父类方法。
+     * 扫描器通过 AopUtils.getTargetClass() 获取目标类方法，
+     * 注册时 bean 为代理实例，method 来自目标类 —— 执行必须正常。
+     */
+    @Test
+    void testExecuteOnSubclassBean() throws Exception {
+        SampleDefinition def = createDefinition("test-subclass", "子类代理示例", "模拟 CGLIB 代理场景");
+        SubclassSampleBean proxyBean = new SubclassSampleBean();
+        // 方法来自父类 TestSampleBean，但 bean 实例是子类（模拟 CGLIB 代理 extends 目标类）
+        Method method = TestSampleBean.class.getMethod("hello", Map.class);
+
+        registry.register(def, proxyBean, method);
+
+        var result = registry.execute("test-subclass", Map.of("name", "proxy"));
+        assertTrue(result.isSuccess());
+        assertEquals("Hello, proxy", result.getData());
+    }
+
     private SampleDefinition createDefinition(String id, String name, String description) {
         SampleDefinition def = new SampleDefinition();
         def.setId(id);
@@ -140,5 +159,11 @@ class SampleRegistryTest {
         public Object error(Map<String, Object> params) {
             throw new RuntimeException("模拟异常");
         }
+    }
+
+    /**
+     * 子类 Bean，模拟 CGLIB 代理（代理类 extends 目标类）
+     */
+    public static class SubclassSampleBean extends TestSampleBean {
     }
 }

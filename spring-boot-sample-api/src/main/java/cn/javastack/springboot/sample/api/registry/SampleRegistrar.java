@@ -4,8 +4,10 @@ import cn.javastack.springboot.sample.api.annotation.SampleDemo;
 import cn.javastack.springboot.sample.api.annotation.SampleParam;
 import cn.javastack.springboot.sample.api.model.SampleDefinition;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -30,21 +32,26 @@ public class SampleRegistrar implements SmartInitializingSingleton {
     public void afterSingletonsInstantiated() {
         String[] beanNames = applicationContext.getBeanDefinitionNames();
         for (String beanName : beanNames) {
-            Object bean = applicationContext.getBean(beanName);
-            scanBean(bean);
+            try {
+                Object bean = applicationContext.getBean(beanName);
+                scanBean(bean);
+            } catch (Exception e) {
+                log.debug("跳过无法扫描的 Bean: {}", beanName);
+            }
         }
         log.info("示例目录注册完成，共 {} 个示例", registry.getAllDefinitions().size());
     }
 
     private void scanBean(Object bean) {
-        Method[] methods = bean.getClass().getDeclaredMethods();
+        Class<?> targetClass = AopUtils.getTargetClass(bean);
+        Method[] methods = ReflectionUtils.getDeclaredMethods(targetClass);
         for (Method method : methods) {
             SampleDemo annotation = method.getAnnotation(SampleDemo.class);
             if (annotation != null) {
                 SampleDefinition definition = buildDefinition(annotation);
                 registry.register(definition, bean, method);
                 log.debug("注册示例: {} -> {}.{}", definition.getId(),
-                        bean.getClass().getSimpleName(), method.getName());
+                        targetClass.getSimpleName(), method.getName());
             }
         }
     }
