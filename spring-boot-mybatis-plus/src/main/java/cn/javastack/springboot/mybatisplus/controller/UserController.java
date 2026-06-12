@@ -1,7 +1,5 @@
 package cn.javastack.springboot.mybatisplus.controller;
 
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +47,6 @@ public class UserController {
     @ResponseBody
     @PostMapping("/users")
     public UserDO createUser(@RequestBody UserDO user) {
-        user.setCreateTime(LocalDateTime.now());
         if (user.getStatus() == null) {
             user.setStatus(1);
         }

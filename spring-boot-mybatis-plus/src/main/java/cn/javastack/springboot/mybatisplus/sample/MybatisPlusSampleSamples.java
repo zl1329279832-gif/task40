@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +137,6 @@ public class MybatisPlusSampleSamples {
         user.setUsername(username);
         user.setPhone(phone);
         user.setStatus(status);
-        user.setCreateTime(LocalDateTime.now());
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("提示", "此示例执行了 UserService.save(user)");
